@@ -34,6 +34,22 @@ class LinkedAllocation:
         self.files[name] = blocks[0]
         print(f"{name} allocated in blocks {blocks}")
         self.show_disk()
+
+    def read(self, name):
+        if name not in self.files:
+            print("Error: File not found.")
+            self.show_disk()
+            return
+
+        # Traverse the linked chain of blocks
+        blocks = []
+        current = self.files[name]
+        while current != -1:
+            blocks.append(current)
+            current = self.next_block[current]
+        print(f"{name} is stored in blocks {blocks}")
+        self.show_disk()
+
     def deallocate(self, name):
         if name not in self.files:
             print("Error: File not found.")
@@ -58,5 +74,5 @@ class LinkedAllocation:
 if __name__ == "__main__":
     linked = LinkedAllocation(20)
     linked.allocate("FileB", 5)
-    
+    linked.read("FileB")
     linked.deallocate("FileB")
